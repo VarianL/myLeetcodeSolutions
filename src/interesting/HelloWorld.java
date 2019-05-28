@@ -1,0 +1,6 @@
+package interesting;
+
+class HelloWorld {
+  
+
+}
