@@ -1,7 +1,5 @@
 package problems;
 
-import java.util.ArrayList;
-
 class Problem4 {
 
   /**
@@ -16,58 +14,30 @@ class Problem4 {
   public double findMedianSortedArrays(int[] nums1, int[] nums2) {
 
     int totalLength = nums1.length + nums2.length;
-    boolean isOdd = (totalLength & 1) == 0 ? false : true;
-    if (nums1.length == 0) {
-      return isOdd ? nums2[nums2.length / 2] : (nums2[nums2.length / 2 - 1] + nums2[nums2.length / 2]) / 2.0;
-    } else if (nums2.length == 0) {
-      return isOdd ? nums1[nums1.length / 2] : (nums1[nums1.length / 2 - 1] + nums1[nums1.length / 2]) / 2.0;
-    }
-    ArrayList<Integer> list = new ArrayList<Integer>();
-    int i = 0;
-    int j = 0;
-
-    while ((i + j) < totalLength) {
-      while ((nums1[i] < nums2[j])) {
-        list.add(nums1[i]);
-        ++i;
-        if (i == nums1.length) {
-          while (j < nums2.length) {
-            list.add(nums2[j]);
-            ++j;
-          }
-          break;
-        } 
-      }
-      if (i >= nums1.length && j >= nums2.length) {
-        break;
-      }
-      while ((nums1[i] >= nums2[j])) {
-        list.add(nums2[j]);
-        ++j;
-        if (j == nums2.length) {
-          while (i < nums1.length) {
-            list.add(nums1[i]);
-            ++i;
-          }
-          break;
+        boolean isOdd = (totalLength & 1) == 1 ? true : false;
+        if (nums1.length == 0) {
+            return isOdd ? nums2[nums2.length / 2] : (nums2[nums2.length / 2 - 1] + nums2[nums2.length / 2]) / 2.0;
+        } else if (nums2.length == 0) {
+            return isOdd ? nums1[nums1.length / 2] : (nums1[nums1.length / 2 - 1] + nums1[nums1.length / 2]) / 2.0;
         }
-      }
-      if (list.size() >= totalLength / 2 + 1) {
-        break;
-      }
-    }
-    if (isOdd) {
-      return list.get(totalLength / 2);
-    } else {
-      return (list.get(totalLength / 2) + list.get(totalLength / 2 - 1)) / 2.0;
-    }
+        int i = 0, j = 0;
+        int[] result = new int[totalLength / 2 + 1];
+        for (int m = 0; m < result.length; ++m) {
+            if (i < nums1.length && j < nums2.length) {
+                result[m] = nums1[i] < nums2[j] ? nums1[i++] : nums2[j++];
+            } else if (i == nums1.length && j < nums2.length) {
+                result[m] = nums2[j++];
+            } else if (j == nums2.length && i < nums1.length) {
+                result[m] = nums1[i++];
+            }
+        }
+        return isOdd ? result[result.length - 1] : (result[result.length - 1] + result[result.length - 2]) / 2.0;
   }
 
   public static void main(String[] args) {
     Problem4 p = new Problem4();
     int[] nums2 = {};
     int[] nums1 = { 3, 4 };
-    System.out.println(50 / 2.0);
     System.out.println(p.findMedianSortedArrays(nums1, nums2));
   }
 }
