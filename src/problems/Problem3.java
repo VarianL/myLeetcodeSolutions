@@ -1,6 +1,6 @@
 package problems;
 
-import java.util.HashSet;
+import java.util.Arrays;
 
 class Problem3 {
   public int lengthOfLongestSubstring(String s) {
@@ -9,35 +9,26 @@ class Problem3 {
     } else if (s.length() <= 1) {
       return s.length();
     }
-    char lastChar = 0;
-    int len = 0;
-    int res = 1;
-    HashSet<Character> set = new HashSet<>();
-    for (char ch : s.toCharArray()) {
-      if (ch == lastChar && set.contains(ch)) {
-        if (res < len) {
-          res = len;
-        }
-        len = 1;
-      } else if (ch != lastChar && set.contains(ch)) {
-        if (res < len) {
-          res = len;
-        }
-        len = 1;
-      } else {
-        ++len;
+    // 记录字符与index的关系
+    int[] indexMap = new int[256];
+    Arrays.fill(indexMap, -1);
+    int start = 0, res = 0;
+    for (int i = 0; i < s.length(); i++) {
+      char c = s.charAt(i);
+      // 如果出现重复的字符，将起始位置 +1
+      if (indexMap[c] != -1 && indexMap[c] >= start) {
+        res = Math.max(res, i - start);
+        start = indexMap[c] + 1;
       }
-      lastChar = ch;
-      set.add(ch);
+      // 记录字符最后一次出现在字符串中的位置
+      indexMap[c] = i;
     }
-    if (res < len) {
-      res = len;
-    }
+    res = Math.max(res, s.length()  - start);
     return res;
   }
 
   public static void main(String[] args) {
-    String str = "dvd";
+    String str = "anviaj";
     Problem3 p = new Problem3();
     System.out.println(p.lengthOfLongestSubstring(str));
   }
